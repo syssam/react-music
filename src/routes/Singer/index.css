@@ -1,0 +1,51 @@
+.singer-list {
+    position: fixed;
+    top: 88px;
+    bottom: 0;
+    width: 100%;
+}
+
+.singer-list ul {
+    list-style: none;
+}
+
+.list-group {
+    padding-bottom: 30px;
+}
+
+.list-group-title {
+    height: 30px;
+    line-height: 30px;
+    padding-left: 20px;
+    font-size: 16px;
+    color: hsla(0,0%,100%,.5);
+    background: #333;
+    text-align: left;
+}
+
+.list-group-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 0 0 15px;
+}
+
+.singer-list .ant-avatar-lg {
+    width: 80px;
+    height: 80px;
+    line-height: 80px;
+    border-radius: 50%;
+}
+
+.singer-list .name {
+    margin-left: 20px;
+    color: hsla(0,0%,100%,.5);
+    font-size: 14px;
+    vertical-align: baseline;
+}
+
+.list-fixed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+}

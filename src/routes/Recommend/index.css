@@ -1,0 +1,41 @@
+.ant-carousel .slick-slide img {
+    width: 100%;
+    display: block;
+}
+
+.recommend-list .list-title {
+    height: 65px;
+    line-height: 65px;
+    text-align: center;
+    font-size: 16px;
+    color: #ffcd32;
+}
+
+.recommend-list .list-item {
+    display: flex;
+    padding: 0 15px 20px;
+}
+
+.recommend-list .list-item .image {
+    padding-right: 15px;
+}
+
+.recommend-list .list-item img {
+    height: 100px;
+}
+
+.recommend-list .list-item .content {
+    flex: 1;
+}
+
+.recommend-list .list-item .title {
+    margin-bottom: 10px;
+    color: #fff;
+    text-align: left;
+    font-size: 15px;
+}
+
+.recommend-list .list-item .description {
+    color: hsla(0,0%,100%,.3);
+    text-align: left;
+}

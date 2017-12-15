@@ -1,0 +1,35 @@
+.header {
+    position: relative;
+    height: 44px;
+    line-height: 44px;
+    text-align: center;
+    font-size: 0;
+}
+
+.header-logo {
+    display: inline-block;
+    margin-right: 0px;
+}
+
+.header-user {
+    float: right;
+    font-size: 20px;
+    background: none;
+    border: 0px;
+    height: 44px;
+    width: 44px;
+    color: #ffcd32;
+    outline: 0;
+}
+
+.app-logo {
+    height: 44px;
+}
+
+.app-title {
+    display: inline-block;
+    font-size: 18px;
+    margin: 0px;
+    vertical-align: top;
+    color: #ffcd32;
+}
