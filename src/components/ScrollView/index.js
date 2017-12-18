@@ -3,14 +3,14 @@ import PropTypes from 'prop-types';
 import BScroll from 'better-scroll';
 import './index.css';
 
-const DIRECTION_H = 'horizontal'
-const DIRECTION_V = 'vertical'
-const DEFAULT_LOAD_TXT_MORE = 'Load more'
-const DEFAULT_LOAD_TXT_NO_MORE = 'No more data'
-const DEFAULT_REFRESH_TXT = 'Refresh success'
+const DIRECTION_H = 'horizontal';
+const DIRECTION_V = 'vertical';
+const DEFAULT_LOAD_TXT_MORE = 'Load more';
+const DEFAULT_LOAD_TXT_NO_MORE = 'No more data';
+const DEFAULT_REFRESH_TXT = 'Refresh success';
 
 const DEFAULT_OPTIONS = {
-    click: true,
+    observeDOM: true,
     probeType: 1,
     scrollbar: false,
     pullDownRefresh: false,
@@ -36,17 +36,25 @@ class ScrollView extends React.PureComponent {
     }
 
 
-    pullUpTxt() {
-        const { pullUpLoad } = this.props.options
-        const txt = pullUpLoad && pullUpLoad.txt
-        const moreTxt = txt && txt.more || DEFAULT_LOAD_TXT_MORE
-        const noMoreTxt = txt && txt.noMore || DEFAULT_LOAD_TXT_NO_MORE
-        return this.state.pullUpDirty ? moreTxt : noMoreTxt
+    pullUpLoad = () => {
+        return this.props.options.pullUpLoad
+    }
+    
+    pullDownRefresh = () => {
+        return this.props.options.pullDownRefresh
     }
 
-    refreshTxt() {
-        const { pullDownRefresh } = this.props.options
-        return pullDownRefresh && pullDownRefresh.txt || DEFAULT_REFRESH_TXT
+    pullUpTxt = () => {
+        const pullUpLoad = this.pullUpLoad;
+        const txt = pullUpLoad && pullUpLoad.txt;
+        const moreTxt = txt && (txt.more || DEFAULT_LOAD_TXT_MORE);
+        const noMoreTxt = txt && (txt.noMore || DEFAULT_LOAD_TXT_NO_MORE);
+        return this.state.pullUpDirty ? moreTxt : noMoreTxt;
+    }
+
+    refreshTxt = () => {
+        const pullDownRefresh = this.pullDownRefresh
+        return pullDownRefresh && (pullDownRefresh.txt || DEFAULT_REFRESH_TXT)
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -75,19 +83,17 @@ class ScrollView extends React.PureComponent {
             this.scrollContainer.style.minHeight = `${this.scrollWrapper.height + 1}px`
         }
 
-        const { options } = this.props;
-
         let options = Object.assign({}, DEFAULT_OPTIONS, {
-            scrollY: this.direction === DIRECTION_V,
-            scrollX: this.direction === DIRECTION_H
-        }, this.props.options)
+            scrollY: this.props.direction === DIRECTION_V,
+            scrollX: this.props.direction === DIRECTION_H
+        }, this.props.options);
 
         this.scroll = new BScroll(this.scrollWrapper, options);
-        this.initScrollEvents();
+        this._initScrollEvents();
     }
 
-    initScrollEvents = () => {
-        const { onScroll, onBeforeScrollStart, onPullingDown, onPullingUp } = this.props
+    _initScrollEvents = () => {
+        const { onScroll, onBeforeScrollStart } = this.props
 
         if (onScroll) {
             this.scroll.on('scroll', (position) => { onScroll(position) });
@@ -97,11 +103,11 @@ class ScrollView extends React.PureComponent {
             this.scroll.on('beforeScrollStart', () => { onBeforeScrollStart });
         }
 
-        if (pullDownRefresh) {
+        if (this.pullDownRefresh) {
             this._initPullDownRefresh();
         }
 
-        if (pullUpLoad) {
+        if (this.pullUpLoad) {
             this._initPullUpLoad();
         }
     }
@@ -131,17 +137,16 @@ class ScrollView extends React.PureComponent {
     }
 
     forceUpdate(dirty) {
-        const { pullDownRefresh, pullUpLoad } = this.props;
         const { isPullingDown, isPullUpLoad } = this.state;
 
-        if (pullDownRefresh && isPullingDown) {
+        if (this.pullDownRefresh && isPullingDown) {
             this.setState({
                 isPullingDown: false,
             });
             this._reboundPullDown().then(() => {
                 this._afterPullDown()
             });
-        } else if (pullUpLoad && isPullUpLoad) {
+        } else if (this.pullUpLoad && isPullUpLoad) {
             this.setState({
                 isPullUpLoad: false,
             });
@@ -156,15 +161,16 @@ class ScrollView extends React.PureComponent {
     }
 
     _initPullDownRefresh = () => {
-        const { pullDownRefresh } = this.props;
+        const { onPullingDown } = this.props;
         let { beforePullDown, isRebounding } = this.state;
 
         this.scroll.on('pullingDown', () => {
-            pullDownRefresh();
             this.setState({
                 beforePullDown: false,
                 isPullingDown: true,
             });
+
+            onPullingDown();
 
             this._reboundPullDown().then(() => {
                 this._afterPullDown();
@@ -196,19 +202,19 @@ class ScrollView extends React.PureComponent {
     }
 
     _initPullUpLoad = () => {
-        const { pullUpLoad } = this.props;
+        const { onPullingUp } = this.props;
 
         this.scroll.on('pullingUp', () => {
             this.setState({
                 isPullUpLoad: false,
             });
 
-            pullUpLoad();
+            onPullingUp();
         })
     }
 
     _reboundPullDown() {
-        const { stopTime = 600 } = this.props.pullDownRefresh;
+        const {stopTime = 600} = this.pullDownRefresh;
 
         return new Promise((resolve) => {
             setTimeout(() => {
@@ -239,15 +245,15 @@ class ScrollView extends React.PureComponent {
     }
 
     renderPullUpLoad = () => {
-        const { pullUpLoad } = this.props;
         const { isPullUpLoad } = this.state;
+        const pullUpTxt = this.pullUpTxt();
 
-        if(pullUpLoad) {
+        if(this.pullUpLoad) {
             return (
                 <div className="pullup-wrapper">
                     { !isPullUpLoad ?
                     <div className="before-trigger">
-                         <span>{this.pullUpTxt}</span>
+                        <span>{ pullUpTxt }</span>
                     </div>
                     :
                     <div className="after-trigger">
@@ -256,18 +262,19 @@ class ScrollView extends React.PureComponent {
                 </div>
             )
         }
+
+        return null;
     }
 
     renderPullDown = () => {
-        const { pullDownRefresh } = this.props;
         const { pullDownStyle, beforePullDown, isPullingDown, bubbleY } = this.state;
 
-        if(pullDownRefresh) {
+        if(this.pullDownRefresh) {
             return (
                 <div ref="pulldown" className="pulldown-wrapper" style={pullDownStyle}>
                     { beforePullDown ?
                     <div className="before-trigger">
-                        bubble
+                        {bubbleY}
                     </div>
                     :
                     <div className="after-trigger">
@@ -276,7 +283,7 @@ class ScrollView extends React.PureComponent {
                             Loading
                         </div>
                         :
-                        <div><span>refreshTxt</span></div>
+                        <div><span>{ this.refreshTxt }</span></div>
                         }
                     </div>
                     }
@@ -289,10 +296,12 @@ class ScrollView extends React.PureComponent {
         return (
             <div ref={(wrapper) => { this.scrollWrapper = wrapper; }} className="scroll-wrapper">
                 <div ref={(container) => { this.scrollContainer = container; }} className="scroll-container">
-                    <div className="scroll-inner-container">{this.props.children}</div>
-                    { this.renderPullUpLoad() }
+                    <div className="scroll-inner-container">
+                        {this.props.children}
+                    </div>
+                    {this.renderPullUpLoad()}
                 </div>
-                { this.renderPullDown() }
+                {this.renderPullDown()}
             </div>
         );
     }
@@ -314,6 +323,7 @@ ScrollView.defaultProps = {
     listenBeforeScroll: false,
     direction: DIRECTION_V,
     refreshDelay: 20,
+    listRef: 'list'
 };
 
 export default ScrollView;
