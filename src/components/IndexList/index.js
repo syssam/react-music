@@ -2,7 +2,8 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import ScrollView from '../ScrollView';
-import './index.css';
+import ListGroup from './ListGroup';
+import './index.less';
 
 const COMPONENT_NAME = 'index-list'
 
@@ -10,7 +11,7 @@ const TITLE_HEIGHT = 50
 const SUBTITLE_HEIGHT = 40
 const ANCHOR_HEIGHT = window.innerHeight <= 480 ? 17 : 18
 
-class ListView extends React.PureComponent {
+class IndexList extends React.PureComponent {
     constructor(props) {
         super(props);
 
@@ -20,7 +21,8 @@ class ListView extends React.PureComponent {
             diff: -1,
             options: {
                 probeType: 3
-            }
+            },
+            titleHeight: null
         }
 
         this.listenScroll = true
@@ -28,6 +30,7 @@ class ListView extends React.PureComponent {
         this.touch = {}
         this.refIndexList = null;
         this.refListGroup = [];
+        this.subTitleHeight = 0
     }
 
     componentDidUpdate(prevProps, prevState) {
@@ -50,6 +53,8 @@ class ListView extends React.PureComponent {
     }
 
     componentDidMount() {
+        this.titleHeight = this.title && this.refTitle ? this.refTitle.height : 0;
+        this.subTitleHeight = 40;
         setTimeout(() => {
             this._calculateHeight()
         }, 20)
@@ -59,6 +64,7 @@ class ListView extends React.PureComponent {
         if (this.state.scrollY > -TITLE_HEIGHT) {
           return ''
         }
+
         return this.props.data[this.state.currentIndex] ? this.props.data[this.state.currentIndex].name : ''
     }
 
@@ -135,7 +141,7 @@ class ListView extends React.PureComponent {
     }
 
     diff(newVal) {
-        let fixedTop = (newVal > 0 && newVal < SUBTITLE_HEIGHT) ? newVal - SUBTITLE_HEIGHT : 0
+        let fixedTop = (newVal > 0 && newVal < this.subTitleHeight) ? newVal - this.subTitleHeight : 0
         if (this.fixedTop === fixedTop) {
           return
         }
@@ -177,18 +183,12 @@ class ListView extends React.PureComponent {
         return (
             <ul ref={(groups) => { this.refGroups = groups; }}>
                 {data.map((group, index) =>
-                    <li ref={(refListGroup) => { this.refListGroup.push(refListGroup); }} className="list-group" key={index}>
-                        <h2 className="index-list-anchor">{group.name}</h2>
-                        <ul>
-                            {group.items.map((item, index) =>
-                            <li
-                                key={index}
-                                className="index-list-item">
-                                {item.name}
-                            </li>
-                            )}
-                        </ul>
-                    </li>
+                    <ListGroup 
+                        //ref={(refListGroup) => { this.refListGroup.push(refListGroup); }}
+                        listGroupRef={el => this.refListGroup.push(el)}
+                        key={index}
+                        group={group}
+                    />
                 )}
             </ul>
         )
@@ -208,33 +208,42 @@ class ListView extends React.PureComponent {
 
     render() {
         const { options } = this.state;
-        console.log(this.state);
         return (
-            <div className="index-list">
-                <ScrollView
-                    ref={(indexList) => { this.refIndexList = indexList; }}
-                    listenScroll={this.listenScroll}
-                    onScroll={this.scroll}
-                    options={options}>
-                    <div 
-                        className="index-list-content"
-                        ref={(content) => { this.refContent = content; }}>
-                        { this.renderList() }
-                    </div>
-                </ScrollView>
-                { this.renderfixedTitle() }
+            <div className="index-list-wrapper">
+                <div className="index-list">
+                    <ScrollView
+                        ref={(indexList) => { this.refIndexList = indexList; }}
+                        listenScroll={this.listenScroll}
+                        onScroll={this.scroll}
+                        options={options}>
+                        {
+                            this.props.title &&
+                            <h1 class="index-list-title">
+                                {this.props.title}
+                            </h1>
+                        }
+                        <div 
+                            className="index-list-content"
+                            ref={(content) => { this.refContent = content; }}>
+                            { this.renderList() }
+                        </div>
+                    </ScrollView>
+                    { this.renderfixedTitle() }
+                </div>
             </div>
         );
     }
 }
 
-ListView.propTypes = {
-    data: PropTypes.array,
+IndexList.propTypes = {
+    title: PropTypes.string,
+    data: PropTypes.array
 };
 
 // Specifies the default values for props:
-ListView.defaultProps = {
+IndexList.defaultProps = {
+    title: '',
     data: [],
 };
 
-export default ListView;
+export default IndexList;

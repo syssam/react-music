@@ -1,0 +1,12 @@
+
+.index-list-anchor {
+    padding: 16px 16px 10px 16px;
+    line-height: 1;
+    font-size: 14px;
+    color: #999;
+    background: #f7f7f7;
+    margin: 0;
+    border: 0;
+    font-weight: 400;
+    vertical-align: baseline;
+}

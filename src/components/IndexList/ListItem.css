@@ -1,0 +1,16 @@
+
+
+.index-list-item {
+    position: relative;
+    height: 50px;
+    line-height: 50px;
+    padding: 0 16px;
+    font-size: 14px;
+    color: #333;
+    &:last-child {
+        border: 0px;
+    }
+    .index-list-item-active {
+        background: #000;
+    }
+}

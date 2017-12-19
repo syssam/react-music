@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { Avatar } from 'antd';
-import ListView from '../../components/ListView';
+import IndexList from '../../components/IndexList';
 import jsonp from '../../utils/jsonp';
 import './index.css';
 
@@ -83,7 +83,7 @@ class Singer extends Component {
             <div>
                 <section className="singer-list">
                     {list &&
-                    <ListView 
+                    <IndexList 
                         data={list}
                     />}
                 </section>
