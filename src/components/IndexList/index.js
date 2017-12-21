@@ -1,5 +1,6 @@
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ScrollView from '../ScrollView';
 import ListGroup from './ListGroup';
@@ -7,8 +8,6 @@ import './index.less';
 
 const COMPONENT_NAME = 'index-list'
 
-const TITLE_HEIGHT = 50
-const SUBTITLE_HEIGHT = 40
 const ANCHOR_HEIGHT = window.innerHeight <= 480 ? 17 : 18
 
 class IndexList extends React.PureComponent {
@@ -25,7 +24,6 @@ class IndexList extends React.PureComponent {
             titleHeight: null
         }
 
-        this.listenScroll = true
         this.listHeight = []
         this.touch = {}
         this.refIndexList = null;
@@ -35,11 +33,17 @@ class IndexList extends React.PureComponent {
 
     componentDidUpdate(prevProps, prevState) {
         const { scrollY, diff } = this.state;
-        const { data } = this.props;
+        const { data, title } = this.props;
 
         if(prevProps.data !== data) {
             setTimeout(() => {
                 this._calculateHeight()
+            }, 20)
+        }
+
+        if(prevProps.title !== title) {
+            setTimeout(() => {
+                this.title(title);
             }, 20)
         }
 
@@ -53,19 +57,21 @@ class IndexList extends React.PureComponent {
     }
 
     componentDidMount() {
-        this.titleHeight = this.title && this.refTitle ? this.refTitle.height : 0;
-        this.subTitleHeight = 40;
-        setTimeout(() => {
-            this._calculateHeight()
-        }, 20)
+        this.setState({
+            titleHeight: this.title && this.refTitle ? this.refTitle.clientHeight : 0
+        });
+
+        this._calculateHeight();
     }
 
-    fixedTitle = () => {
-        if (this.state.scrollY > -TITLE_HEIGHT) {
-          return ''
-        }
+    fixedTitle() {
+        const { titleHeight, scrollY, currentIndex } = this.state;
 
-        return this.props.data[this.state.currentIndex] ? this.props.data[this.state.currentIndex].name : ''
+        if (titleHeight === null || scrollY > -titleHeight) {
+            return ''
+          }
+
+        return this.props.data[currentIndex] ? this.props.data[currentIndex].name : ''
     }
 
     shortcutList() {
@@ -113,16 +119,18 @@ class IndexList extends React.PureComponent {
     }
 
     _calculateHeight() {
-        const list = this.refListGroup;
-        if (!list) {
+        const subTitleEl = ReactDOM.findDOMNode(this).querySelector('.index-list-anchor');
+        this.subTitleHeight = subTitleEl ? subTitleEl.clientHeight : 0;
+
+        if (!this.refListGroup) {
           return
         }
 
         this.listHeight = [];
-        let height = TITLE_HEIGHT
+        let height = this.state.titleHeight;
         this.listHeight.push(height)
-        for (let i = 0; i < list.length; i++) {
-          let item = list[i]
+        for (let i = 0; i < this.refListGroup.length; i++) {
+          let item = this.refListGroup[i]
           height += item.clientHeight
           this.listHeight.push(height)
         }
@@ -140,6 +148,13 @@ class IndexList extends React.PureComponent {
         })
     }
 
+    title(newVal) {
+        this.setState({
+            titleHeight: newVal && this.refTitle ? this.refTitle.clientHeight : 0
+        });
+        this._calculateHeight()
+    }
+
     diff(newVal) {
         let fixedTop = (newVal > 0 && newVal < this.subTitleHeight) ? newVal - this.subTitleHeight : 0
         if (this.fixedTop === fixedTop) {
@@ -149,11 +164,10 @@ class IndexList extends React.PureComponent {
         this.refFixed.style.transform = `translate3d(0,${fixedTop}px,0)`
     }
 
-    
     scrollY(newY) {
         const listHeight = this.listHeight
         // top
-        if (newY > -TITLE_HEIGHT) {
+        if (newY > -this.state.titleHeight) {
             this.setState({
                 currentIndex: 0
             })
@@ -178,13 +192,12 @@ class IndexList extends React.PureComponent {
         })
     }
 
-    renderList = () => {
+    renderList() {
         const  { data } = this.props;
         return (
             <ul ref={(groups) => { this.refGroups = groups; }}>
                 {data.map((group, index) =>
                     <ListGroup 
-                        //ref={(refListGroup) => { this.refListGroup.push(refListGroup); }}
                         listGroupRef={el => this.refListGroup.push(el)}
                         key={index}
                         group={group}
@@ -194,10 +207,10 @@ class IndexList extends React.PureComponent {
         )
     }
 
-    renderfixedTitle = () => {
-        if(this.fixedTitle) {
+    renderfixedTitle() {
+        if(this.fixedTitle()) {
             return (
-                <div className="index-list-fixed" ref={(fixed) => { this.refFixed = fixed; }}>
+                <div className="index-list-fixed" ref={(el) => { this.refFixed = el; }}>
                     {this.fixedTitle()}
                 </div>
             )
@@ -213,12 +226,11 @@ class IndexList extends React.PureComponent {
                 <div className="index-list">
                     <ScrollView
                         ref={(indexList) => { this.refIndexList = indexList; }}
-                        listenScroll={this.listenScroll}
                         onScroll={this.scroll}
                         options={options}>
                         {
                             this.props.title &&
-                            <h1 class="index-list-title">
+                            <h1 class="index-list-title" ref={(el) => { this.refTitle = el; }}>
                                 {this.props.title}
                             </h1>
                         }
