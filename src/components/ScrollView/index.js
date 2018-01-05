@@ -35,7 +35,6 @@ class ScrollView extends React.PureComponent {
         this.pullDownInitTop = -50;
     }
 
-
     pullUpLoad() {
         return this.props.options.pullUpLoad
     }
@@ -58,7 +57,7 @@ class ScrollView extends React.PureComponent {
     }
 
     componentDidUpdate(prevProps, prevState) {
-        if(this.props.children !== prevProps.children) {
+        if(this.state !== prevState) {
             setTimeout(() => {
                 this.forceUpdate(true)
             }, this.props.refreshDelay)
@@ -96,7 +95,9 @@ class ScrollView extends React.PureComponent {
         const { onScroll, onBeforeScrollStart } = this.props
 
         if (onScroll) {
-            this.scroll.on('scroll', (position) => { onScroll(position) });
+            this.scroll.on('scroll', (position) => { 
+                onScroll(position)
+            });
         }
 
         if (onBeforeScrollStart) {
@@ -314,7 +315,7 @@ ScrollView.propTypes = {
     onBeforeScrollStart: PropTypes.func,
     onScroll: PropTypes.func,
     onPullingUp: PropTypes.func,
-    onPullingDown:  PropTypes.func
+    onPullingDown: PropTypes.func
 };
 
 // Specifies the default values for props:

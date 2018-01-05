@@ -1,14 +1,12 @@
 import React, { Component } from 'react';
-import { Avatar } from 'antd';
+import { Link } from 'react-router-dom';
 import IndexList from '../../components/IndexList';
+import ScrollView from  '../../components/ScrollView';
 import jsonp from '../../utils/jsonp';
 import './index.css';
 
-import singerData from './singer.json';
-
-const listTitle = {
-    popular: '热门'
-}
+const HOT_NAME = '热门'
+const HOT_SINGER_LEN = 10
 
 class Singer extends Component {
     constructor(props) {
@@ -20,10 +18,7 @@ class Singer extends Component {
     }
 
     componentDidMount() {
-        this.setState({
-            list: singerData
-        });
-        //this.getSingers(); 
+        this.getSingers(); 
     }
 
     getSingers = async () => {
@@ -33,49 +28,89 @@ class Singer extends Component {
     }
 
     setList = (singers) => {
-        let list = {};
-        list['popular'] = [];
-        list['#'] = [];
+        let hot = {
+            name: HOT_NAME,
+            items: [],
+        };
+
+        let hash = {
+            name: '#',
+            items: [],
+        };
+
+        let list = {
+            hot: hot
+        };
 
         singers.forEach(function(singer) {
-            if(singer.Farea > 0 && list['popular'].length < 9) {
-                list['popular'].push(singer);
+            if(singer.Farea > 0 && list.hot.items.length < HOT_SINGER_LEN) {
+                list.hot.items.push({
+                    id: singer.Fsinger_mid,
+                    name: singer.Fsinger_name,
+                    avatar: `http://y.gtimg.cn/music/photo_new/T001R150x150M000${singer.Fsinger_mid}.jpg?max_age=2592000`
+                });
             }
 
             if(!isNaN(singer.Findex)) {
-                list['#'].push(singer);
+                hash.items.push({
+                    id: singer.Fsinger_mid,
+                    name: singer.Fsinger_name,
+                    avatar: `http://y.gtimg.cn/music/photo_new/T001R150x150M000${singer.Fsinger_mid}.jpg?max_age=2592000`
+                });
             } else {
                 if(!list[singer.Findex]) {
-                    list[singer.Findex] = [];
+                    list[singer.Findex] = {
+                        name: singer.Findex,
+                        items: [],
+                    };
                 }
-                list[singer.Findex].push(singer);
+                list[singer.Findex].items.push({
+                    id: singer.Fsinger_mid,
+                    name: singer.Fsinger_name,
+                    avatar: `http://y.gtimg.cn/music/photo_new/T001R150x150M000${singer.Fsinger_mid}.jpg?max_age=2592000`
+                });
             }
         });
 
-        list = Object.entries(list).sort(function(a, b) {
-            var nameA = a[0].toUpperCase();
-            var nameB = b[0].toUpperCase();
-            
-            if(nameB === 'POPULAR' || nameA === '#') {
-                return 1;
-            } else if(nameA === 'POPULAR' || nameB === '#') {
+        list['#'] = hash;
+
+        let ret = [];
+
+        Object.entries(list).map((item, index) => {
+            ret.push(item[1])
+        })
+
+        ret.sort(function(a, b) {
+            var nameA = a.name.toUpperCase();
+            var nameB = b.name.toUpperCase();
+
+            if(nameA === HOT_NAME || nameB === '#') {
                 return -1;
-            }
-            
-            if (nameA < nameB) {
-              return -1;
+            } else if(nameA === '#') {
+                return 1;
             }
 
-            if (nameA > nameB) {
-              return 1;
-            }
-          
-            return 0;
+            return nameA.charCodeAt(0) - nameB.charCodeAt(0);
         });
 
-        this.setState({ list: list });
+        this.setState({ list: ret });
     }
 
+    renderItem = (item, index) => {
+        return (
+            <Link
+                to={{
+                    pathname: `/singer/${item.id}`
+                }}>
+                <img className="avatar" src={item.avatar} />
+                <span className="name">{item.name}</span>
+            </Link>
+        )
+    }
+
+    onClickItem = (item, index) => {
+    }
+    
     render() {
         const { list } = this.state;
 
@@ -85,6 +120,8 @@ class Singer extends Component {
                     {list &&
                     <IndexList 
                         data={list}
+                        renderItem={this.renderItem}
+                        onClickItem={this.onClickItem}
                     />}
                 </section>
             </div>

@@ -1,0 +1,93 @@
+.singer-detail {
+    .header {
+        position: relative;
+    }
+    .back {
+        background: none;
+        border: 0px;
+        position: absolute;
+        top: 0;
+        left: 6px;
+        z-index: 50;
+        width: 40px;
+        height: 40px;
+        padding: 0px;
+        outline: 0;
+        .icon {
+            font-size: 22px;
+            color: #ffcd32;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    .title {
+        position: absolute;
+        top: 0;
+        left: 10%;
+        z-index: 40;
+        width: 80%;
+        text-align: center;
+        line-height: 40px;
+        font-size: 18px;
+        color: #fff;
+        margin: 0px;
+    }
+    .bg-image {
+        position: absolute;
+        padding-top: 50%;
+        width: 100%;
+        top: 0;
+        transform-origin: top;
+        background-size: cover;
+        z-index: 0;
+    }
+    .play-btn {
+        box-sizing: border-box;
+        outline: 0;
+        width: 135px;
+        padding: 7px 0;
+        margin-left: -135px / 2;
+        left: 50%;
+        text-align: center;
+        border: 1px solid #ffcd32;
+        color: #ffcd32;
+        border-radius: 100px;
+        background: none;
+        position: absolute;
+        bottom: 20px;
+        z-index: 50;
+        .icon, .text {
+            display: inline-block;
+            vertical-align: middle
+        }
+        .icon {
+            margin-right: 6px;
+            font-size: 16px;
+        }
+        .text {
+            font-size: 12px;
+        }
+    }
+    .bg-cover {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(7,17,27,.4);
+    }
+    .list {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
+    .scroll-wrapper {
+        overflow: unset;
+    }
+    .list-cover {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+        background-color: #222;
+    }
+}

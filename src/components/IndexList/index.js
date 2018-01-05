@@ -4,6 +4,7 @@ import ReactDOM from 'react-dom';
 import PropTypes from 'prop-types';
 import ScrollView from '../ScrollView';
 import ListGroup from './ListGroup';
+import { getData } from '../../utils/dom';
 import './index.less';
 
 const COMPONENT_NAME = 'index-list'
@@ -75,47 +76,39 @@ class IndexList extends React.PureComponent {
     }
 
     shortcutList() {
-        return this.data.map((group) => {
+        return this.props.data.map((group) => {
             return group.name.substr(0, 1)
         })
     }
 
-    refresh() {
-        this.refIndexList.refresh()
-    }
-
-    scroll = (pos) => {
+    onScroll = (pos) => {
         this.setState({
             scrollY: pos.y
         });
     }
 
-    onShortcutTouchStart(e) {
-        /*
+    onShortCutTouchStart = (e) => {
         let anchorIndex = getData(e.target, 'index')
-        let firstTouch = e.touches[0]
-        this.touch.y1 = firstTouch.pageY
-        this.touch.anchorIndex = anchorIndex
+        if(e.type !== 'click') {
+            let firstTouch = e.touches[0]
+            this.touch.y1 = firstTouch.pageY
+            this.touch.anchorIndex = anchorIndex
+        }
         this._scrollTo(anchorIndex)
-        */
     }
 
-    onShortcutTouchMove(e) {
-        /*
-        let firstTouch = e.touches[0]
+    onShortCutTouchMove = (e) => {
+        if(e.isDefaultPrevented()) {
+            e.preventDefault();
+        }
+        if(e.isPropagationStopped()) {
+            e.stopPropagation();
+        }
+        let firstTouch = e.touches[0];
         this.touch.y2 = firstTouch.pageY
         let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
         let anchorIndex = parseInt(this.touch.anchorIndex) + delta
         this._scrollTo(anchorIndex)
-        */
-    }
-
-    addActiveClass(e) {
-        //addClass(e.currentTarget, ACTIVE_CLS)
-    }
-
-    removeActiveClass(e) {
-        //dremoveClass(e.currentTarget, ACTIVE_CLS)
     }
 
     _calculateHeight() {
@@ -131,8 +124,10 @@ class IndexList extends React.PureComponent {
         this.listHeight.push(height)
         for (let i = 0; i < this.refListGroup.length; i++) {
           let item = this.refListGroup[i]
-          height += item.clientHeight
-          this.listHeight.push(height)
+          if(item) {
+            height += item.clientHeight
+            this.listHeight.push(height)
+          }
         }
     }
 
@@ -193,7 +188,7 @@ class IndexList extends React.PureComponent {
     }
 
     renderList() {
-        const  { data } = this.props;
+        const { data, onClickItem, renderItem } = this.props;
         return (
             <ul ref={(groups) => { this.refGroups = groups; }}>
                 {data.map((group, index) =>
@@ -201,6 +196,8 @@ class IndexList extends React.PureComponent {
                         listGroupRef={el => this.refListGroup.push(el)}
                         key={index}
                         group={group}
+                        onClickItem={onClickItem}
+                        renderItem={renderItem}
                     />
                 )}
             </ul>
@@ -219,18 +216,33 @@ class IndexList extends React.PureComponent {
         return null;
     }
 
+    renderNav() {
+        const shortcutList = this.shortcutList();
+        const { currentIndex } = this.state;
+        return (
+            <div className="index-list-nav" onClick={this.onShortCutTouchStart} onTouchStart={this.onShortCutTouchStart}  onTouchMove={this.onShortCutTouchMove}>
+                <ul>
+                {shortcutList.map((item, index) =>
+                    <li key={index} className={currentIndex === index ? 'active' : ''} data-index={index}>{item}</li>
+                )}
+                </ul>
+            </div>
+        )
+    }
+
     render() {
         const { options } = this.state;
+
         return (
             <div className="index-list-wrapper">
                 <div className="index-list">
                     <ScrollView
                         ref={(indexList) => { this.refIndexList = indexList; }}
-                        onScroll={this.scroll}
+                        onScroll={this.onScroll}
                         options={options}>
                         {
                             this.props.title &&
-                            <h1 class="index-list-title" ref={(el) => { this.refTitle = el; }}>
+                            <h1 className="index-list-title" ref={(el) => { this.refTitle = el; }}>
                                 {this.props.title}
                             </h1>
                         }
@@ -240,6 +252,7 @@ class IndexList extends React.PureComponent {
                             { this.renderList() }
                         </div>
                     </ScrollView>
+                    { this.renderNav() }
                     { this.renderfixedTitle() }
                 </div>
             </div>
@@ -249,7 +262,11 @@ class IndexList extends React.PureComponent {
 
 IndexList.propTypes = {
     title: PropTypes.string,
-    data: PropTypes.array
+    data: PropTypes.array,
+    onClickItem: PropTypes.func,
+    renderItem: PropTypes.func,
+    renderHeader: PropTypes.func,
+    renderFooter: PropTypes.func,
 };
 
 // Specifies the default values for props:

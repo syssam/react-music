@@ -3,33 +3,36 @@
     top: 88px;
     bottom: 0;
     width: 100%;
+    background: #222;
 }
 
-.singer-list ul {
-    list-style: none;
+.singer-list .scroll-wrapper, .singer-list .index-list-content {
+    background: #222;
 }
 
-.list-group {
+.singer-list .index-list-group {
     padding-bottom: 30px;
 }
 
-.list-group-title {
+.singer-list .index-list-anchor, .singer-list .index-list-fixed {
+    padding: 0px;
     height: 30px;
     line-height: 30px;
     padding-left: 20px;
-    font-size: 16px;
+    font-size: 14px;
     color: hsla(0,0%,100%,.5);
     background: #333;
     text-align: left;
 }
 
-.list-group-item {
+.singer-list .index-list-item {
     display: flex;
     align-items: center;
     padding: 20px 0 0 15px;
+    height: auto;
 }
 
-.singer-list .ant-avatar-lg {
+.singer-list .avatar {
     width: 80px;
     height: 80px;
     line-height: 80px;
@@ -43,9 +46,18 @@
     vertical-align: baseline;
 }
 
-.list-fixed {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
+.singer-list .index-list-nav > ul {
+    margin-right: 5px;
+}
+
+.singer-list .index-list-nav > ul > li {
+    color: hsla(0,0%,100%,.5);
+    padding: 3px;
+    font-size: 12px;
+}
+
+.singer-list .index-list-nav > ul > li.active {
+    background-color: #ffcd32;
+    border-radius: 50%;
+    color: #000;
 }

@@ -2,11 +2,12 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './ListItem.css';
 
-const ListItem = ({item}) => {
+const ListItem = (props) => {
+    const { item, index, renderItem } = props;
     return (
         <div
             className="index-list-item">
-            {item.name}
+            { renderItem ? renderItem(item, index) : item.name }
         </div>
     );
 }

@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.0.2",
+    "antd": "^3.0.3",
     "axios": "^0.17.1",
     "babel-plugin-import": "^1.6.2",
     "better-scroll": "^1.6.2",

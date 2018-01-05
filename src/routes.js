@@ -1,24 +1,15 @@
 import React from 'react';
-import Recommend from './routes/Recommend'
-import Singer from './routes/Singer'
+import DefaultLayout from './layouts';
+import SingerDetail from './routes/SingerDetail';
 
 const routes = [
     { 
+        path: '/singer/:id',
+        main: () => <SingerDetail />
+    },
+    { 
         path: '/',
-        exact: true,
-        main: () => <Recommend />
-    },
-    { 
-        path: '/singer',
-        main: () => <Singer />
-    },
-    { 
-        path: '/rank',
-        main: () => <div style={{backgroundColor: "blue"}}><h2>rank</h2></div>
-    },
-    { 
-        path: '/search',
-        main: () => <div style={{backgroundColor: "pink"}}><h2>search</h2></div>
+        main: () => <DefaultLayout />
     }
 ]
 
