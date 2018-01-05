@@ -2,13 +2,14 @@ import React from 'react';
 import PropTypes from 'prop-types';
 import './ListItem.css';
 
-const ListItem = (props) => {
-    const { item, index, renderItem } = props;
+const ListItem = ({ item, index, renderItem, onClickItem }) => {
+    const handleClick = onClickItem ? () => onClickItem(item, index) : undefined;
     return (
-        <div
+        <li
+            onClick={handleClick}
             className="index-list-item">
             { renderItem ? renderItem(item, index) : item.name }
-        </div>
+        </li>
     );
 }
 
@@ -18,7 +19,7 @@ ListItem.propTypes = {
 
 // Specifies the default values for props:
 ListItem.defaultProps = {
-    item: {},
+    item: {}
 };
 
 

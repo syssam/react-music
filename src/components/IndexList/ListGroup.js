@@ -3,8 +3,7 @@ import PropTypes from 'prop-types';
 import ListItem from './ListItem';
 import './ListGroup.css';
 
-const ListGroup = (props) => {
-    const { group, listGroupRef, onClickItem, renderItem } = props;
+const ListGroup = ({ group, listGroupRef, onClickItem, renderItem }) => {
 
     return (
         <div className="index-list-group" ref={listGroupRef} >
@@ -15,8 +14,8 @@ const ListGroup = (props) => {
                         item={item}
                         key={index}
                         index={index}
-                        onClick={ onClickItem ? onClickItem(item, index) : null }
-                        renderItem={ renderItem ? renderItem : null }
+                        onClickItem={onClickItem}
+                        renderItem={renderItem}
                     />
                 )}
             </ul>

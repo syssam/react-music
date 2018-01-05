@@ -11,6 +11,11 @@
     color: #ffcd32;
 }
 
+.recommend-list > ul {
+    margin: 0px;
+    padding: 0px;
+}
+
 .recommend-list .list-item {
     display: flex;
     padding: 0 15px 20px;

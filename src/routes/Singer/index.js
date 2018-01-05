@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { withRouter } from 'react-router-dom';
 import IndexList from '../../components/IndexList';
-import ScrollView from  '../../components/ScrollView';
 import jsonp from '../../utils/jsonp';
 import './index.css';
 
@@ -18,7 +17,7 @@ class Singer extends Component {
     }
 
     componentDidMount() {
-        this.getSingers(); 
+       this.getSingers(); 
     }
 
     getSingers = async () => {
@@ -76,11 +75,9 @@ class Singer extends Component {
 
         let ret = [];
 
-        Object.entries(list).map((item, index) => {
-            ret.push(item[1])
-        })
+        Object.entries(list).map((item, index) => ret.push(item[1]));
 
-        ret.sort(function(a, b) {
+        ret.sort((a, b) => {
             var nameA = a.name.toUpperCase();
             var nameB = b.name.toUpperCase();
 
@@ -98,17 +95,21 @@ class Singer extends Component {
 
     renderItem = (item, index) => {
         return (
-            <Link
-                to={{
-                    pathname: `/singer/${item.id}`
-                }}>
-                <img className="avatar" src={item.avatar} />
+            <div>
+                <img alt={item.name} className="avatar" src={item.avatar} />
                 <span className="name">{item.name}</span>
-            </Link>
+            </div>
         )
     }
 
     onClickItem = (item, index) => {
+        this.props.history.push({
+            pathname: `/singer/${item.id}`,
+            state: {
+                id: item.id,
+                name: item.name,
+            }
+        })
     }
     
     render() {
@@ -129,4 +130,4 @@ class Singer extends Component {
     }
 }
 
-export default Singer;
+export default withRouter(Singer);

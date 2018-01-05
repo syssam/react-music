@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import jsonp from '../../utils/jsonp';
 import ScrollView from  '../../components/ScrollView';
 import MusicList from '../../components/MusicList';
+import Spin from '../../components/Common/Spin';
 import './index.less';
 
 
@@ -27,7 +28,6 @@ class SingerDetail extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { scrollY } = this.state;
-        const { data } = this.props;
 
         if(prevState.scrollY !== scrollY) {
             this.scrollY(scrollY);
@@ -39,9 +39,21 @@ class SingerDetail extends Component {
             return
         }
         
-        if(this.backgroundHeight != this.refBackground.clientHeight) {
+        if(this.backgroundHeight !== this.refBackground.clientHeight) {
             this.backgroundHeight = this.refBackground.clientHeight;
             this.refList.style.top = `${this.backgroundHeight}px`;
+        }
+    }
+
+    componentWillMount() {
+        if(this.props.location.state) {
+            const { name, id } = this.props.location.state;
+            if(name) {
+                this.setState({
+                    name: name,
+                    avatar: `http://y.gtimg.cn/music/photo_new/T001R500x500M000${id}.jpg?max_age=2592000`,
+                })
+            }
         }
     }
 
@@ -51,7 +63,11 @@ class SingerDetail extends Component {
     }
 
     getSinger = async () => {
-        let response = await jsonp(`https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?inCharset=utf-8&outCharset=utf-8&format=jsonp&order=listen&begin=0&num=80&songstatus=1&singermid=002J4UUk29y8BY`, {name: 'SingerJsonCallback'});
+        const singer = this.props.match.params.id;
+        if(!singer) {
+            this.props.history.push(`/singer`)
+        }
+        let response = await jsonp(`https://c.y.qq.com/v8/fcg-bin/fcg_v8_singer_track_cp.fcg?inCharset=utf-8&outCharset=utf-8&format=jsonp&order=listen&begin=0&num=80&songstatus=1&singermid=${singer}`, {name: 'SingerJsonCallback'});
         const { list, singer_name, singer_mid } = response.data;
         let ret = [];
 
@@ -62,8 +78,6 @@ class SingerDetail extends Component {
                 desc: music.musicData.albumname
             })
         })
-
-        console.log(list);
 
         this.setState({
             name: singer_name,
@@ -145,13 +159,17 @@ class SingerDetail extends Component {
     render() {
         const { name, avatar, list, refBackgroundStyle, refPlayButtonStyle, refListCoverStyle, refBgCoverStyle } = this.state;
 
-        const bgImageStyle = Object.assign({}, refBackgroundStyle, { 
-            backgroundImage: 'url(' + avatar + ')' }
-        );
+        const bgImageStyle = {
+            backgroundImage: avatar ? 'url(' + avatar + ')' : `unset`,
+            ...refBackgroundStyle
+        };
+
         return(
             <div className="singer-detail">
                 <div className="header">
-                    <button className="back"><i className="icon fa fa-chevron-left" aria-hidden="true"></i></button>
+                    <Link to={'/singer'}>
+                        <button className="back"><i className="icon fa fa-chevron-left" aria-hidden="true"></i></button>
+                    </Link>
                     <h1 className="title">{name}</h1>
                 </div>
                 <div
@@ -170,17 +188,17 @@ class SingerDetail extends Component {
                 <div
                     className="list"
                     ref={(el) => { this.refList = el; }}>
-                    {list && 
                     <ScrollView
                         onScroll={this.onScroll}
                         options={DEFAULT_OPTIONS}
                         ref={(el) => { this.refScroll = el; }}>
                         <MusicList data={list} />
-                    </ScrollView>}
+                        {list.length === 0 && <Spin />}
+                    </ScrollView>
                 </div>
             </div>
         )
     }
 }
 
-export default SingerDetail
+export default withRouter(SingerDetail)

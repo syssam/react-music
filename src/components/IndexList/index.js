@@ -7,8 +7,6 @@ import ListGroup from './ListGroup';
 import { getData } from '../../utils/dom';
 import './index.less';
 
-const COMPONENT_NAME = 'index-list'
-
 const ANCHOR_HEIGHT = window.innerHeight <= 480 ? 17 : 18
 
 class IndexList extends React.PureComponent {
@@ -107,7 +105,7 @@ class IndexList extends React.PureComponent {
         let firstTouch = e.touches[0];
         this.touch.y2 = firstTouch.pageY
         let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
-        let anchorIndex = parseInt(this.touch.anchorIndex) + delta
+        let anchorIndex = parseInt(this.touch.anchorIndex, 0) + delta
         this._scrollTo(anchorIndex)
     }
 

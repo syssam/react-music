@@ -1,0 +1,22 @@
+.spin {
+    width: 100%;
+    text-align: center;
+}
+.spin .text {
+    line-height: 20px;
+    font-size: 13px;
+    color: hsla(0,0%,100%,.5);
+    margin-top: 5px;
+}
+
+@keyframes spinRotate {
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.spin .icon {
+    animation: spinRotate 1.2s infinite linear;
+    color: #ffcd32;
+    font-size: 35px;
+}

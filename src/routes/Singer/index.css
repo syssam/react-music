@@ -10,6 +10,11 @@
     background: #222;
 }
 
+.singer-list .index-list-content {
+    -webkit-box-shadow: 0 3px 6px #222;
+    box-shadow: 0 3px 6px #222;
+}
+
 .singer-list .index-list-group {
     padding-bottom: 30px;
 }

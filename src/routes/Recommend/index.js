@@ -39,7 +39,7 @@ class Recommend extends Component {
                     <Carousel autoplay speed={1000}>
                         {sliders.map((slider, index) => (
                             <a href={slider.linkUrl} key={slider.id} target="_blank">
-                                <img src={slider.picUrl} />
+                                <img alt="" src={slider.picUrl} />
                             </a>
                         ))}
                     </Carousel>
@@ -49,7 +49,7 @@ class Recommend extends Component {
                     <ul>
                         {recommends.map((recommend, index) => (
                             <li className="list-item" key={recommend.content_id}>
-                                <div className="image"><img src={recommend.cover} /></div>
+                                <div className="image"><img alt={recommend.title} src={recommend.cover} /></div>
                                 <div className="content">
                                     <h5 className="title">{recommend.title}</h5>
                                     <p className="description">{recommend.rcmdcontent}</p>
