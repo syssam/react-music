@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import NormalPlayer from './NormalPlayer';
 import MiniPlayer from './MiniPlayer';
+import NormalPlayer from './NormalPlayer';
 
 class Player extends React.PureComponent {
     constructor(props) {

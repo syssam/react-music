@@ -1,3 +1,8 @@
+.default-layout .header {
+    height: 44px;
+    line-height: 44px;
+}
+
 .tabs {
     list-style: none;
     flex: 1;

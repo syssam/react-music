@@ -1,0 +1,200 @@
+@keyframes rotate-360 {
+    from {transform: rotate(0deg);}
+    to {transform: rotate(360deg);}
+}
+
+.normal-player {
+	position: fixed;
+    left: 0;
+    right: 0;
+    top: 0;
+    bottom: 0;
+    z-index: 150;
+    background: #222;
+    .background {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        z-index: -1;
+        opacity: .6;
+        -webkit-filter: blur(20px);
+        filter: blur(20px);
+        img {
+            height: 100%;
+            width: 100%;
+        }
+    }
+    .header {
+        margin-bottom: 25px;
+    }
+    .back {
+        background: none;
+        border: 0px;
+        position: absolute;
+        top: 0;
+        left: 6px;
+        z-index: 50;
+        width: 40px;
+        height: 40px;
+        padding: 0px;
+        outline: 0;
+        .icon {
+            font-size: 22px;
+            color: #ffcd32;
+            display: inline-block;
+            vertical-align: middle;
+        }
+    }
+    .title {
+        width: 70%;
+        margin: 0 auto;
+        line-height: 40px;
+        text-align: center;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        font-size: 18px;
+        color: #fff;
+    }
+    .sub-title {
+        line-height: 20px;
+        text-align: center;
+        font-size: 14px;
+        color: #fff;
+    }
+    .middle {
+        position: fixed;
+        width: 100%;
+        top: 80px;
+        bottom: 170px;
+        white-space: nowrap;
+        font-size: 0;
+        .cd-wrapper {
+            display: inline-block;
+            vertical-align: top;
+            position: relative;
+            width: 100%;
+            height: 0;
+            padding-top: 80%;
+        }
+        .cd-container {
+            position: absolute;
+            left: 10%;
+            top: 0;
+            width: 80%;
+            box-sizing: border-box;
+            height: 100%;
+        }
+        .cd {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            .image {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                height: 100%;
+                box-sizing: border-box;
+                border-radius: 50%;
+                border: 10px solid hsla(0,0%,100%,.1);
+            }
+            .image.playing {
+                animation: rotate-360 20s linear infinite;
+            }
+        }
+    }
+    .bottom {
+        position: absolute;
+        bottom: 50px;
+        width: 100%;
+        .progress-wrapper {
+            width: 80%;
+            margin: 0 auto;
+            padding: 10px 0;
+            display: flex;
+            .time {
+                color: #fff;
+                font-size: 12px;
+                -webkit-box-flex: 0;
+                -ms-flex: 0 0 30px;
+                flex: 0 0 30px;
+                line-height: 30px;
+                width: 30px;
+            }
+            .progress-bar {
+                flex: 1;
+            }
+            .progress-bar-container {
+                height: 30px;
+            }
+            .progress-bar-inner {
+                position: relative;
+                top: 13px;
+                height: 4px;
+                background: rgba(0,0,0,.3);
+            }
+            .progress {
+                position: absolute;
+                height: 100%;
+                background: #ffcd32;
+            }
+            .start-time {
+                text-align: left;
+            }
+            .end-time {
+                text-align: right;
+            }
+            .progress-btn-wrapper {
+                position: absolute;
+                left: -8px;
+                top: -13px;
+                width: 30px;
+                height: 30px;
+            }
+            .progress-btn {
+                position: relative;
+                top: 7px;
+                left: 7px;
+                box-sizing: border-box;
+                width: 16px;
+                height: 16px;
+                border: 3px solid #fff;
+                border-radius: 50%;
+                background: #ffcd32;
+            }
+        }
+        .controls-group {
+            display: flex;
+            align-items: center;
+            .align-left {
+                text-align: left;
+            }
+            .align-right {
+                text-align: right;
+            }
+            .align-center {
+                padding: 0 20px;
+                text-align: center;
+            }
+            .flex-1 {
+                flex: 1;
+            }
+            button {
+                background: none;
+                border: 0px;
+                outline: 0;
+                cursor: pointer;
+            }
+            i {
+                font-size: 30px;
+                color: #ffcd32;
+            }
+            .play-btn i {
+                font-size: 40px;
+            }
+        }
+    }
+}
