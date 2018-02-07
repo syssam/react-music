@@ -2,7 +2,7 @@ import React from 'react';
 import { Switch, Route, NavLink } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Header from '../components/Header';
-import routes from '../index-routes';
+import routes from '../indexRoutes';
 import './index.css';
 
 const Fade = (props) => {
@@ -31,7 +31,6 @@ const DefaultLayout = (props) => {
                 <li className="tab-item"><NavLink to="/search">搜索</NavLink></li>
             </ul>
             <Route
-            path="/"
             render={({ location }) => (
               <Fade location={location}>
                 <Switch location={location} key={location.key}>

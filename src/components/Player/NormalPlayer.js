@@ -45,11 +45,11 @@ const NormalPlayer = (props) => {
                 */
                 }
                 <div className="controls-group">
-                    <div className="flex-1 align-right"><button><i class="fa fa-random" aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-right"><button><i class="fa fa-backward" aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-center"><button className="play-btn"><i class="fa fa-play-circle-o" aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-left"><button><i class="fa fa-forward" aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-left"><button><i class="fa fa-heart-o" aria-hidden="true"></i></button></div>
+                    <div className="flex-1 align-right"><button><i className="fa fa-random" aria-hidden="true"></i></button></div>
+                    <div className="flex-1 align-right"><button><i className="fa fa-backward" aria-hidden="true"></i></button></div>
+                    <div className="flex-1 align-center"><button className="play-btn"><i className="fa fa-play-circle-o" aria-hidden="true"></i></button></div>
+                    <div className="flex-1 align-left"><button><i className="fa fa-forward" aria-hidden="true"></i></button></div>
+                    <div className="flex-1 align-left"><button><i className="fa fa-heart-o" aria-hidden="true"></i></button></div>
                 </div>
             </div>
         </div>

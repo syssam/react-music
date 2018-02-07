@@ -5,7 +5,6 @@ import routes from './routes';
 const Router = () => {
     return (
         <Route
-            path="/"
             render={({ location }) => (
             <Switch location={location} key={location.key}>
                 {routes.map((route, index) => (

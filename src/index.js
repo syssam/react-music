@@ -1,16 +1,22 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
+import { Provider } from 'react-redux'
+import configureStore from './configureStore'
 import { BrowserRouter as Router } from 'react-router-dom';
 import 'antd/lib/style/index.less';
 import './index.css';
 import App from './App';
 import registerServiceWorker from './registerServiceWorker';
 
+const store = configureStore()
+
 const Root = () => {
     return (
-        <Router>
-            <App />
-        </Router>
+        <Provider store={store}>
+            <Router>
+                <App />
+            </Router>
+        </Provider>
     )
 }
 

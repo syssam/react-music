@@ -3,19 +3,22 @@
   "version": "0.1.0",
   "private": true,
   "dependencies": {
-    "antd": "^3.0.3",
+    "antd": "^3.1.1",
     "axios": "^0.17.1",
     "babel-plugin-import": "^1.6.2",
-    "better-scroll": "^1.6.2",
+    "better-scroll": "^1.7.2",
     "jsonp": "^0.2.1",
-    "react": "^16.1.1",
+    "react": "^16.2.0",
     "react-app-rewire-less": "^2.1.0",
-    "react-dom": "^16.1.1",
+    "react-dom": "^16.2.0",
     "react-redux": "^5.0.6",
     "react-router": "^4.2.0",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.0.17",
-    "react-transition-group": "^2.2.1"
+    "react-transition-group": "^2.2.1",
+    "redux": "^3.7.2",
+    "redux-logger": "^3.0.6",
+    "redux-thunk": "^2.2.0"
   },
   "scripts": {
     "start": "react-app-rewired start",
@@ -24,6 +27,6 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-app-rewired": "^1.4.0"
+    "react-app-rewired": "^1.4.1"
   }
 }
