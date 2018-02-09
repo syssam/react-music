@@ -116,16 +116,14 @@ class Singer extends Component {
         const { list } = this.state;
 
         return(
-            <div>
-                <section className="singer-list">
-                    {list &&
-                    <IndexList 
-                        data={list}
-                        renderItem={this.renderItem}
-                        onClickItem={this.onClickItem}
-                    />}
-                </section>
-            </div>
+            <section className="singer-list">
+                {list &&
+                <IndexList 
+                    data={list}
+                    renderItem={this.renderItem}
+                    onClickItem={this.onClickItem}
+                />}
+            </section>
         )
     }
 }

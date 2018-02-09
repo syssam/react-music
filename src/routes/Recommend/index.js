@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import ScrollView from '../../components/ScrollView';
 import { Carousel } from 'antd';
 import jsonp from '../../utils/jsonp';
 import './index.css';
@@ -34,8 +35,9 @@ class Recommend extends Component {
     render() {
         const { sliders, recommends } = this.state;
         return(
-            <div>
-                {sliders.length &&
+            <div className="recommend">
+                {sliders.length && recommends.length &&
+                <ScrollView>
                     <Carousel autoplay speed={1000}>
                         {sliders.map((slider, index) => (
                             <a href={slider.linkUrl} key={slider.id} target="_blank">
@@ -43,21 +45,21 @@ class Recommend extends Component {
                             </a>
                         ))}
                     </Carousel>
-                }
-                <section className="recommend-list">
-                    <h3 className="list-title">热门歌单推荐</h3>
-                    <ul>
-                        {recommends.map((recommend, index) => (
-                            <li className="list-item" key={recommend.content_id}>
-                                <div className="image"><img alt={recommend.title} src={recommend.cover} /></div>
-                                <div className="content">
-                                    <h5 className="title">{recommend.title}</h5>
-                                    <p className="description">{recommend.rcmdcontent}</p>
-                                </div>
-                            </li>
-                        ))}
-                    </ul>
-                </section>
+                    <section className="recommend-list">
+                        <h3 className="list-title">热门歌单推荐</h3>
+                        <ul>
+                            {recommends.map((recommend, index) => (
+                                <li className="list-item" key={recommend.content_id}>
+                                    <div className="image"><img alt={recommend.title} src={recommend.cover} /></div>
+                                    <div className="content">
+                                        <h5 className="title">{recommend.title}</h5>
+                                        <p className="description">{recommend.rcmdcontent}</p>
+                                    </div>
+                                </li>
+                            ))}
+                        </ul>
+                    </section>
+                </ScrollView>}
             </div>
         )
     }

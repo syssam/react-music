@@ -9,7 +9,7 @@ import './index.less';
 
 const ANCHOR_HEIGHT = window.innerHeight <= 480 ? 17 : 18
 
-class IndexList extends React.PureComponent {
+class IndexList extends React.Component {
     constructor(props) {
         super(props);
 
@@ -30,28 +30,45 @@ class IndexList extends React.PureComponent {
         this.subTitleHeight = 0
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        const { scrollY, diff } = this.state;
-        const { data, title } = this.props;
+    shouldComponentUpdate(nextProps, nextState) {
+        if(this.props.data !== nextProps.data) {
+            return true;
+        }
 
-        if(prevProps.data !== data) {
+        if(this.state.currentIndex !== nextState.currentIndex) {
+            return true;
+        }
+
+        if(nextState.scrollY > -nextState.titleHeight) {
+            return true;
+        }
+
+        if(this.state.diff !== nextState.diff) {
+            return true;
+        }
+
+        if(nextProps.title && this.props.title !== nextProps.title) {
+            setTimeout(() => {
+                this.title(nextProps.title);
+            }, 20)
+        }
+        
+        if(this.state.scrollY !== nextState.scrollY) {
+            this.scrollY(nextState.scrollY);
+        }
+
+        return false;
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if(this.props.data !== prevProps.data) {
             setTimeout(() => {
                 this._calculateHeight()
             }, 20)
         }
 
-        if(prevProps.title !== title) {
-            setTimeout(() => {
-                this.title(title);
-            }, 20)
-        }
-
-        if(prevState.scrollY !== scrollY) {
-            this.scrollY(scrollY);
-        }
-
-        if(prevState.diff !== diff) {
-            this.diff(diff);
+        if(this.state.diff !== prevState.diff) {
+            this.diff(this.state.diff);
         }
     }
 
@@ -68,14 +85,14 @@ class IndexList extends React.PureComponent {
 
         if (titleHeight === null || scrollY > -titleHeight) {
             return ''
-          }
+        }
 
         return this.props.data[currentIndex] ? this.props.data[currentIndex].name : ''
     }
 
     shortcutList() {
         return this.props.data.map((group) => {
-            return group.name.substr(0, 1)
+            return group ? group.shortcut || group.name.substr(0, 1) : ''
         })
     }
 
@@ -87,21 +104,14 @@ class IndexList extends React.PureComponent {
 
     onShortCutTouchStart = (e) => {
         let anchorIndex = getData(e.target, 'index')
-        if(e.type !== 'click') {
-            let firstTouch = e.touches[0]
-            this.touch.y1 = firstTouch.pageY
-            this.touch.anchorIndex = anchorIndex
-        }
+        let firstTouch = e.touches[0]
+        this.touch.y1 = firstTouch.pageY
+        this.touch.anchorIndex = anchorIndex
         this._scrollTo(anchorIndex)
     }
 
     onShortCutTouchMove = (e) => {
-        if(e.isDefaultPrevented()) {
-            e.preventDefault();
-        }
-        if(e.isPropagationStopped()) {
-            e.stopPropagation();
-        }
+        e.stopPropagation();
         let firstTouch = e.touches[0];
         this.touch.y2 = firstTouch.pageY
         let delta = (this.touch.y2 - this.touch.y1) / ANCHOR_HEIGHT | 0
@@ -173,7 +183,7 @@ class IndexList extends React.PureComponent {
           if (-newY >= height1 && -newY < height2) {
             this.setState({
                 currentIndex: i,
-                diff: height2 + newY
+                diff: Math.max(height2 + newY)
             })
             return
           }
@@ -218,7 +228,7 @@ class IndexList extends React.PureComponent {
         const shortcutList = this.shortcutList();
         const { currentIndex } = this.state;
         return (
-            <div className="index-list-nav" onClick={this.onShortCutTouchStart} onTouchStart={this.onShortCutTouchStart}  onTouchMove={this.onShortCutTouchMove}>
+            <div className="index-list-nav" onTouchStart={this.onShortCutTouchStart}  onTouchMove={this.onShortCutTouchMove}>
                 <ul>
                 {shortcutList.map((item, index) =>
                     <li key={index} className={currentIndex === index ? 'active' : ''} data-index={index}>{item}</li>

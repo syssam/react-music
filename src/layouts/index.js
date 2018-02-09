@@ -1,17 +1,15 @@
 import React from 'react';
-import { Switch, Route, NavLink } from 'react-router-dom';
+import { Switch, Route, NavLink, withRouter } from 'react-router-dom';
 import { TransitionGroup, CSSTransition } from 'react-transition-group';
 import Header from '../components/Header';
 import routes from '../indexRoutes';
 import './index.css';
 
 const Fade = (props) => {
-    const { location } = props;
     return (
-        <TransitionGroup appear>
+        <TransitionGroup appear className="tab-content">
             <CSSTransition
                 classNames="fade"
-                key={location.key}
                 timeout={{ enter: 150, exit: 0 }}
             >
                 {props.children}
@@ -21,6 +19,8 @@ const Fade = (props) => {
 };
 
 const DefaultLayout = (props) => {
+    const { location } = props;
+
     return (
         <div className="default-layout">
             <Header />
@@ -30,10 +30,8 @@ const DefaultLayout = (props) => {
                 <li className="tab-item"><NavLink to="/rank">排行</NavLink></li>
                 <li className="tab-item"><NavLink to="/search">搜索</NavLink></li>
             </ul>
-            <Route
-            render={({ location }) => (
-              <Fade location={location}>
-                <Switch location={location} key={location.key}>
+            <Fade>
+                <Switch>
                     {routes.map((route, index) => (
                         // Render more <Route>s with the same paths as
                         // above, but different components this time.
@@ -46,9 +44,8 @@ const DefaultLayout = (props) => {
                     ))}
                 </Switch>
             </Fade>
-            )} />
         </div>
     )
 }
 
-export default DefaultLayout
+export default withRouter(DefaultLayout)
