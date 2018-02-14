@@ -34,7 +34,7 @@ export const addToPlayList = song => (dispatch, getState) => {
     let currentIndex = getState().player.currentIndex;
     let playListIndex = findIndex(playList, song);
 
-    currentIndex++
+    currentIndex++;
     playList.splice(currentIndex, 0, song)
 
     if(playListIndex > -1) {
@@ -45,13 +45,13 @@ export const addToPlayList = song => (dispatch, getState) => {
             playList.splice(playListIndex + 1, 1)
         }
     }
-    
-    return {
+
+    dispatch({
         type: ADD_TO_PALYLIST,
         playList: playList,
         isPlaying: true,
         currentIndex: currentIndex
-    }
+    }) 
 }
 
 export const deleteFromPlayList = songID => (dispatch, getState) => {
@@ -66,12 +66,12 @@ export const deleteFromPlayList = songID => (dispatch, getState) => {
 
     let isPlaying = playList.length > 0;
     
-    return {
+    dispatch({
         type: DELETE_FROM_PALYLIST,
         playList: playList,
         isPlaying: isPlaying,
         currentIndex: currentIndex
-    }
+    }) 
 }
 
 export const clearPlayList = () => ({

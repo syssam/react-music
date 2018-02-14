@@ -78,8 +78,8 @@ class Singer extends Component {
         Object.entries(list).map((item, index) => ret.push(item[1]));
 
         ret.sort((a, b) => {
-            var nameA = a.name.toUpperCase();
-            var nameB = b.name.toUpperCase();
+            let nameA = a.name.toUpperCase();
+            let nameB = b.name.toUpperCase();
 
             if(nameA === HOT_NAME || nameB === '#') {
                 return -1;

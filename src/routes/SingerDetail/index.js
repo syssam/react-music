@@ -1,17 +1,20 @@
 import React, { Component } from 'react';
+import { connect } from 'react-redux';
+import { bindActionCreators } from 'redux';
 import { Link, withRouter } from 'react-router-dom';
 import jsonp from '../../utils/jsonp';
 import ScrollView from  '../../components/ScrollView';
 import MusicList from '../../components/MusicList';
 import Spin from '../../components/Common/Spin';
 import './index.less';
+import { addToPlayList } from '../../actions/player'
 
 
 const DEFAULT_OPTIONS = {
     probeType: 3,
 }
 
-class SingerDetail extends Component {
+class SingerDetail extends React.PureComponent {
     constructor(props) {
         super(props);
         this.state = {
@@ -85,8 +88,7 @@ class SingerDetail extends Component {
             list: ret
         })
 
-        response = await jsonp(`https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=1278911659&hostUin=0&format=jsonp&callback=callback&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=0&songmid=002J4UUk29y8BY&filename=C400002J4UUk29y8BY.m4a`, {name: 'callback'});
-        console.log(response);
+        //response = await jsonp(`https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=1278911659&hostUin=0&format=jsonp&callback=callback&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=0&songmid=002J4UUk29y8BY&filename=C400002J4UUk29y8BY.m4a`, {name: 'callback'});
     }
 
     scrollY(newY) {
@@ -156,6 +158,18 @@ class SingerDetail extends Component {
         });
     }
 
+    addToPlayList = () => {
+        const { list } = this.state;
+        for (let index = 0; index < 5; index++) {
+            this.props.addToPlayList(index);
+        }
+        /*
+        list.map((item, index) =>
+            this.props.addToPlayList(item)
+        );
+        */
+    }
+
     render() {
         const { name, avatar, list, refBackgroundStyle, refPlayButtonStyle, refListCoverStyle, refBgCoverStyle } = this.state;
 
@@ -180,7 +194,7 @@ class SingerDetail extends Component {
                         className="play-btn"
                         style={refPlayButtonStyle}>
                         <i className="fa fa-play-circle-o icon" aria-hidden="true"></i>
-                        <span className="text">随机播放全部</span>
+                        <span className="text" onClick={this.addToPlayList}>随机播放全部</span>
                     </button>
                     <div className="bg-cover" style={refBgCoverStyle}></div>
                 </div>
@@ -201,4 +215,13 @@ class SingerDetail extends Component {
     }
 }
 
-export default withRouter(SingerDetail)
+const mapDispatchToProps = dispatch => {
+    return bindActionCreators({
+        addToPlayList
+    }, dispatch)
+}
+
+export default withRouter(connect(
+    null,
+    mapDispatchToProps
+)(SingerDetail));

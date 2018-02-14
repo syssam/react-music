@@ -44,7 +44,7 @@ class IndexList extends React.Component {
         }
 
         if(this.state.diff !== nextState.diff) {
-            return true;
+            this.diff(nextState.diff);
         }
 
         if(nextProps.title && this.props.title !== nextProps.title) {
@@ -60,15 +60,11 @@ class IndexList extends React.Component {
         return false;
     }
 
-    componentDidUpdate(prevProps, prevState) {
-        if(this.props.data !== prevProps.data) {
+    componentWillReceiveProps(nextProps) {
+        if(this.props.data !== nextProps.data) {
             setTimeout(() => {
                 this._calculateHeight()
             }, 20)
-        }
-
-        if(this.state.diff !== prevState.diff) {
-            this.diff(this.state.diff);
         }
     }
 
@@ -160,7 +156,7 @@ class IndexList extends React.Component {
 
     diff(newVal) {
         let fixedTop = (newVal > 0 && newVal < this.subTitleHeight) ? newVal - this.subTitleHeight : 0
-        if (this.fixedTop === fixedTop) {
+        if (this.fixedTop === fixedTop || this.refFixed === null) {
           return
         }
         this.fixedTop = fixedTop

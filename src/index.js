@@ -14,6 +14,10 @@ const store = configureStore()
 
 attachFastClick.attach(document.body)
 
+document.getElementById('root').addEventListener('touchmove', function(e) {
+    e.preventDefault();
+}, false);
+
 const Root = () => {
     return (
         <Provider store={store}>

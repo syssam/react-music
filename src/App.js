@@ -1,12 +1,13 @@
 import React, { Component } from 'react';
 import { connect } from 'react-redux';
-import { withRouter } from 'react-router'
+import { withRouter } from 'react-router-dom'
 import Router from './router'
 import './App.css';
 import Player from './components/Player';
 
 class App extends Component {
   render() {
+    console.log(this.props.playList.length);
     return (
       <div className="App">
         <Router />

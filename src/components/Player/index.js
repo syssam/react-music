@@ -12,7 +12,8 @@ class Player extends React.PureComponent {
 	}
 	
 	render() {
-		const { fullScreen } = this.state; 
+		const { fullScreen } = this.state;
+		console.log(fullScreen);
 		return(
 			<div className="player">
 				{ fullScreen && <NormalPlayer /> }
