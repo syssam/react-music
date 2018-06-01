@@ -7,7 +7,13 @@ import ScrollView from  '../../components/ScrollView';
 import MusicList from '../../components/MusicList';
 import Spin from '../../components/Common/Spin';
 import './index.less';
-import { addToPlayList } from '../../actions/player'
+import { 
+    setPlayList,
+    randomPlay,
+    orderPlay,
+    fullScreen,
+    setCurrentSong
+} from '../../actions/player'
 
 
 const DEFAULT_OPTIONS = {
@@ -74,11 +80,15 @@ class SingerDetail extends React.PureComponent {
         const { list, singer_name, singer_mid } = response.data;
         let ret = [];
 
+        //console.log(list);
+
         list.forEach(function(music) {
             ret.push({
                 id: music.musicData.songmid,
                 name: music.musicData.songname,
-                desc: music.musicData.albumname
+                desc: music.musicData.albumname,
+                duration: music.musicData.interval,
+                url: `http://dl.stream.qqmusic.qq.com/C100${music.musicData.songmid}.m4a`
             })
         })
 
@@ -88,7 +98,7 @@ class SingerDetail extends React.PureComponent {
             list: ret
         })
 
-        //response = await jsonp(`https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=1278911659&hostUin=0&format=jsonp&callback=callback&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=0&songmid=002J4UUk29y8BY&filename=C400002J4UUk29y8BY.m4a`, {name: 'callback'});
+        //let response = await jsonp(`https://c.y.qq.com/base/fcgi-bin/fcg_music_express_mobile3.fcg?g_tk=1278911659&hostUin=0&format=jsonp&callback=callback&inCharset=utf8&outCharset=utf-8&notice=0&platform=yqq&needNewCode=0&cid=205361747&uin=0&songmid=002J4UUk29y8BY&filename=C400002J4UUk29y8BY.m4a`, {name: 'callback'});
     }
 
     scrollY(newY) {
@@ -158,16 +168,19 @@ class SingerDetail extends React.PureComponent {
         });
     }
 
-    addToPlayList = () => {
-        const { list } = this.state;
-        for (let index = 0; index < 5; index++) {
-            this.props.addToPlayList(index);
-        }
-        /*
-        list.map((item, index) =>
-            this.props.addToPlayList(item)
-        );
-        */
+    randomPlay = () => {
+        const { list } = this.state
+        this.props.setPlayList(list)
+        this.props.randomPlay()
+        this.props.fullScreen()
+    }
+
+    orderPlay = (index) => {
+        const { list } = this.state
+        this.props.setPlayList(list)
+        this.props.setCurrentSong(index)
+        this.props.orderPlay()
+        this.props.fullScreen()
     }
 
     render() {
@@ -194,7 +207,7 @@ class SingerDetail extends React.PureComponent {
                         className="play-btn"
                         style={refPlayButtonStyle}>
                         <i className="fa fa-play-circle-o icon" aria-hidden="true"></i>
-                        <span className="text" onClick={this.addToPlayList}>随机播放全部</span>
+                        <span className="text" onClick={this.randomPlay}>随机播放全部</span>
                     </button>
                     <div className="bg-cover" style={refBgCoverStyle}></div>
                 </div>
@@ -206,7 +219,7 @@ class SingerDetail extends React.PureComponent {
                         onScroll={this.onScroll}
                         options={DEFAULT_OPTIONS}
                         ref={(el) => { this.refScroll = el; }}>
-                        <MusicList data={list} />
+                        <MusicList data={list} onClickItem={this.orderPlay} />
                         {list.length === 0 && <Spin />}
                     </ScrollView>
                 </div>
@@ -217,7 +230,11 @@ class SingerDetail extends React.PureComponent {
 
 const mapDispatchToProps = dispatch => {
     return bindActionCreators({
-        addToPlayList
+        setPlayList,
+        randomPlay,
+        orderPlay,
+        fullScreen,
+        setCurrentSong
     }, dispatch)
 }
 

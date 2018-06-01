@@ -1,4 +1,5 @@
 import React from 'react';
+import ProgressBar from '../Common/ProgressBar';
 import './NormalPlayer.less';
 
 const NormalPlayer = (props) => {
@@ -8,7 +9,7 @@ const NormalPlayer = (props) => {
                 <img src="https://y.gtimg.cn/music/photo_new/T002R300x300M000003y8dsH2wBHlo.jpg?max_age=2592000" />
             </div>
             <div className="header">
-                <button className="back"><i className="icon fa fa-chevron-down" aria-hidden="true"></i></button>
+                <button className="back" onClick={props.back}><i className="icon fa fa-chevron-down" aria-hidden="true"></i></button>
                 <h1 className="title">演员</h1>
                 <h2 className="sub-title">薛之谦</h2>
             </div>
@@ -25,16 +26,7 @@ const NormalPlayer = (props) => {
             <div className="bottom">
                 <div className="progress-wrapper">
                     <div className="time start-time">0:00</div>
-                    <div className="progress-bar">
-                        <div className="progress-bar-container">
-                            <div className="progress-bar-inner">
-                                <div className="progress"></div>
-                                <div className="progress-btn-wrapper">
-                                    <div className="progress-btn"></div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                    <ProgressBar percent={props.percent} onPercentChange={props.onPercentChange} />
                     <div className="time end-time">4:00</div>
                 </div>
                 {

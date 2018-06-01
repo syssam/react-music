@@ -1,13 +1,17 @@
 //export const REQUEST_INTL = 'REQUEST_INTL'
 //export const RECEIVE_INTL = 'RECEIVE_INTL'
+export const SET_PLAY_LIST = 'SET_PLAY_LIST'
+export const SET_PLAY_MODE = 'SET_PLAY_MODE'
+export const SET_SCREEN_MODE = 'SET_SCREEN_MODE'
+export const SET_CURRENT_SONG = 'SET_CURRENT_SONG'
 export const PLAY_MODE_RANDOM = 1;
 export const PLAY_MODE_ORDER = 2;
 export const PLAY_MODE_REPEAT = 3;
+export const SCREEN_MODE_FULL = 1;
+export const SCREEN_MODE_MINI = 2;
 export const ADD_TO_PALYLIST = 'ADD_TO_PALYLIST'
 export const DELETE_FROM_PALYLIST = 'DELETE_FROM_PALYLIST'
 export const CLEAR_PLAY_LIST = 'CLEAR_PLAY_LIST'
-export const SET_PLAY_MODE = 'SET_PLAY_MODE'
-
 /*
 export function setIntl(locale) {
     return (dispatch, getState) => {
@@ -27,6 +31,48 @@ function findIndex(list, song) {
     return list.findIndex((item) => {
         return item.id === song.id
     })
+}
+
+export const setPlayList = (playList) => ({
+    type: SET_PLAY_LIST,
+    playList: playList,
+    isPlaying: true
+})
+
+const setPlayMode = (mode) => ({
+    type: SET_PLAY_MODE,
+    mode: mode
+})
+
+export const randomPlay = () => (dispatch) => {
+    dispatch(setPlayMode(PLAY_MODE_RANDOM))
+    dispatch(setCurrentSong(0))
+}
+
+export const orderPlay = () => (dispatch) => {
+    dispatch(setPlayMode(PLAY_MODE_ORDER))
+}
+
+export const repeatPlay = () => (dispatch) => {
+    dispatch(setPlayMode(PLAY_MODE_REPEAT))
+}
+
+const setScreenMode = (screenMode) => ({
+    type: SET_SCREEN_MODE,
+    screenMode: screenMode
+})
+
+export const setCurrentSong = (currentIndex) => ({
+    type: SET_CURRENT_SONG,
+    currentIndex: currentIndex
+})
+
+export const fullScreen = () => (dispatch) => {
+    dispatch(setScreenMode(SCREEN_MODE_FULL))
+}
+
+export const miniScreen = ()  => (dispatch) => {
+    dispatch(setScreenMode(SCREEN_MODE_MINI))
 }
 
 export const addToPlayList = song => (dispatch, getState) => {

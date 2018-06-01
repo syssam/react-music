@@ -7,7 +7,6 @@ import Player from './components/Player';
 
 class App extends Component {
   render() {
-    console.log(this.props.playList.length);
     return (
       <div className="App">
         <Router />

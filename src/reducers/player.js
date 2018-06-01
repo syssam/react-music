@@ -1,19 +1,50 @@
-import { PLAY_MODE_RANDOM, PLAY_MODE_ORDER, PLAY_MODE_REPEAT, ADD_TO_PALYLIST, DELETE_FROM_PALYLIST, CLEAR_PLAY_LIST } from '../actions/player';
+import {
+    SET_PLAY_LIST,
+    SET_PLAY_MODE,
+    SET_SCREEN_MODE,
+    SET_CURRENT_SONG,
+    PLAY_MODE_RANDOM,
+    SCREEN_MODE_MINI,
+    ADD_TO_PALYLIST,
+    DELETE_FROM_PALYLIST,
+    CLEAR_PLAY_LIST
+} from '../actions/player';
 
 const initialState = {
     mode: PLAY_MODE_RANDOM,
     isPlaying: false,
     playList: [],
-    currentIndex: -1
+    currentIndex: -1,
+    screenMode: SCREEN_MODE_MINI
 }
 
 const player = (state = initialState, action) => {
     switch (action.type) {
-        case ADD_TO_PALYLIST:
+        case SET_PLAY_LIST:
             return {
                 ...state,
                 playList: action.playList,
                 isPlaying: true,
+            }
+        case SET_PLAY_MODE:
+            return {
+                ...state,
+                mode: action.mode,
+            }
+        case SET_SCREEN_MODE:
+            return {
+                ...state,
+                screenMode: action.screenMode,
+            }
+        case SET_CURRENT_SONG:
+            return {
+                ...state,
+                currentIndex: action.currentIndex
+            }
+        case ADD_TO_PALYLIST:
+            return {
+                ...state,
+                playList: action.playList,
                 currentIndex: action.currentIndex
             }
         case DELETE_FROM_PALYLIST:

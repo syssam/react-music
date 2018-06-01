@@ -19,8 +19,6 @@ const Fade = (props) => {
 };
 
 const DefaultLayout = (props) => {
-    const { location } = props;
-
     return (
         <div className="default-layout">
             <Header />
