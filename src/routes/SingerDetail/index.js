@@ -80,14 +80,14 @@ class SingerDetail extends React.PureComponent {
         const { list, singer_name, singer_mid } = response.data;
         let ret = [];
 
-        //console.log(list);
-
         list.forEach(function(music) {
             ret.push({
+                singer: singer_name,
                 id: music.musicData.songmid,
                 name: music.musicData.songname,
                 desc: music.musicData.albumname,
                 duration: music.musicData.interval,
+                avatar: `http://y.gtimg.cn/music/photo_new/T001R500x500M000${singer_mid}.jpg?max_age=2592000`,
                 url: `http://dl.stream.qqmusic.qq.com/C100${music.musicData.songmid}.m4a`
             })
         })

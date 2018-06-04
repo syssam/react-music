@@ -2,7 +2,7 @@ import React from 'react';
 
 const MiniPlayer = (props) => {
     return (
-        <div className="mini-player">123</div>
+        <div className="mini-player"></div>
     );
 }
 

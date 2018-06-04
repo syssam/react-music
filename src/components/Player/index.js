@@ -10,6 +10,7 @@ import {
 	setCurrentSong,
 	SCREEN_MODE_FULL
 } from '../../actions/player'
+import './index.less';
 
 class Player extends React.PureComponent {
     constructor(props) {
@@ -24,6 +25,12 @@ class Player extends React.PureComponent {
 	}
 
 	componentDidUpdate(prevProps, prevState) {
+		if(this.state.canPlay) {
+			this.audioRef.play()
+		}
+	}
+
+	componentDidMount() {
 	}
 
 	percent = () => {
@@ -39,14 +46,12 @@ class Player extends React.PureComponent {
 	}
 	
     onCanPlay = () => {
-		console.log("onCanPlay");
 		this.setState({
             canPlay: true,
 		})
     }
 
     onError = () => {
-		console.log("onError");
 		this.setState({
             canPlay: false,
 		})
@@ -59,8 +64,7 @@ class Player extends React.PureComponent {
 	}
 	
 	onEnded = () => {
-		console.log(this.state.currentTime / this.props.currentSong.duration);
-		console.log("onEnded");
+		//console.log(this.state.currentTime / this.props.currentSong.duration);
 	}
 
 	onPercentChange = (newPercent) => {
@@ -70,16 +74,20 @@ class Player extends React.PureComponent {
 			currentTime: currentTime
 		})
 	}
+
+	play = () => {
+		this.setState({
+			canPlay: true
+		})
+	}
 	
 	render() {
 		const { isFullScreen, currentSong } = this.props;
 		return(
 			<div className="player">
-				{ isFullScreen === true && <NormalPlayer back={this.back} percent={this.percent()} onPercentChange={this.onPercentChange} /> }
+				{ isFullScreen === true && <NormalPlayer back={this.back} play={this.play} isPlaying={this.state.canPlay} title={currentSong.singer} avatar={currentSong.avatar} percent={this.percent()} onPercentChange={this.onPercentChange} /> }
 				{ isFullScreen === false && <MiniPlayer open={this.open} /> }
 				<audio
-					controls
-					autoPlay
 					ref={(audioRef) => { this.audioRef = audioRef; }}
 					onCanPlay={this.onCanPlay}
 					onError={this.onError}
