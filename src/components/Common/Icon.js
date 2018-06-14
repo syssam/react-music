@@ -1,9 +1,13 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../../assets/plugin/font-awesome-4.7.0/css/font-awesome.css';
+import '../../assets/plugin/fontawesome-free-5.0.13/css/fontawesome-all.css';
 
-const Icon = ({ type, size }) => {
-    let className = "icon fa fa-" + type;
+const Icon = ({ type, size, style }) => {
+    if(!style) {
+        style = 's';
+    }
+
+    let className = "icon fa" + style + " fa-" + type;
 
     if(size) {
         className += ' fa-' + size;

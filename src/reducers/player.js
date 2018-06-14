@@ -1,5 +1,6 @@
 import {
     SET_PLAY_LIST,
+    SET_PLAY_STATUS,
     SET_PLAY_MODE,
     SET_SCREEN_MODE,
     SET_CURRENT_SONG,
@@ -23,7 +24,11 @@ const player = (state = initialState, action) => {
         case SET_PLAY_LIST:
             return {
                 ...state,
-                playList: action.playList,
+                playList: action.playList
+            }
+        case SET_PLAY_STATUS:
+            return {
+                ...state,
                 isPlaying: true,
             }
         case SET_PLAY_MODE:

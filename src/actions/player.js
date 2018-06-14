@@ -1,6 +1,7 @@
 //export const REQUEST_INTL = 'REQUEST_INTL'
 //export const RECEIVE_INTL = 'RECEIVE_INTL'
 export const SET_PLAY_LIST = 'SET_PLAY_LIST'
+export const SET_PLAY_STATUS = 'SET_PLAY_STATUS'
 export const SET_PLAY_MODE = 'SET_PLAY_MODE'
 export const SET_SCREEN_MODE = 'SET_SCREEN_MODE'
 export const SET_CURRENT_SONG = 'SET_CURRENT_SONG'
@@ -35,8 +36,12 @@ function findIndex(list, song) {
 
 export const setPlayList = (playList) => ({
     type: SET_PLAY_LIST,
-    playList: playList,
-    isPlaying: true
+    playList: playList
+})
+
+const setPlayStatus = (status) => ({
+    type: SET_PLAY_STATUS,
+    isPlaying: status
 })
 
 const setPlayMode = (mode) => ({

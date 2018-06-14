@@ -1,16 +1,17 @@
 import React from 'react';
 import ProgressBar from '../Common/ProgressBar';
+import Icon from '../Common/Icon';
 import './NormalPlayer.less';
 
 const NormalPlayer = (props) => {
-    const playIcon = props.isPlaying ? "fa fa-stop-circle-o" : "fa fa-play-circle-o";
+    const playIcon = props.isPlaying ? "pause-circle" : "play-circle";
     return (
         <div className="normal-player">
             <div className="background">
                 <img src={props.avatar} />
             </div>
             <div className="header">
-                <button className="back" onClick={props.back}><i className="icon fa fa-chevron-down" aria-hidden="true"></i></button>
+                <button className="back" onClick={props.back}><Icon type="chevron-down" /></button>
                 <h1 className="title">演员</h1>
                 <h2 className="sub-title">{props.title}</h2>
             </div>
@@ -38,11 +39,11 @@ const NormalPlayer = (props) => {
                 */
                 }
                 <div className="controls-group">
-                    <div className="flex-1 align-right"><button><i className="fa fa-random" aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-right"><button><i className="fa fa-backward" aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-center"><button className="play-btn" onClick={props.play}><i className={playIcon} aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-left"><button><i className="fa fa-forward" aria-hidden="true"></i></button></div>
-                    <div className="flex-1 align-left"><button><i className="fa fa-heart-o" aria-hidden="true"></i></button></div>
+                    <div className="flex-1 align-right"><button><Icon type="random" /></button></div>
+                    <div className="flex-1 align-right"><button><Icon type="backward" /></button></div>
+                    <div className="flex-1 align-center"><button className="play-btn" onClick={props.play}><Icon type={playIcon} style="r" /></button></div>
+                    <div className="flex-1 align-left"><button><Icon type="forward" /></button></div>
+                    <div className="flex-1 align-left"><button><Icon type="heart" style="r" /></button></div>
                 </div>
             </div>
         </div>
